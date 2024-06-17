@@ -3,12 +3,18 @@
 # export AWS_DEFAULT_REGION=eu-west-2
 
 import json
+import argparse
 import boto3
 
-APPLICATION = "jml"
-ENVIRONMENT = "dev"
-SERVICE = ""
+parser = argparse.ArgumentParser()
+parser.add_argument('application', type=str, help='The name of the application')
+parser.add_argument('env', type=str, help='The name of the environment')
+args = parser.parse_args()
+
+APPLICATION = args.application
+ENVIRONMENT = args.env
 FILENAME = "ssm_parameters.json"
+
 ssm = boto3.client('ssm')
 
 ssm_path_root = f"/copilot/{APPLICATION}/{ENVIRONMENT}/"

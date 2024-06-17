@@ -7,11 +7,6 @@ import argparse
 import boto3
 from botocore import exceptions
 
-APPLICATION = "jml"
-OLD_ENVIRONMENT = "dev"
-ENVIRONMENT = "prod"
-FILENAME = "ssm_parameters.json"
-
 parser = argparse.ArgumentParser()
 parser.add_argument('application', type=str, help='The name of the application')
 parser.add_argument('old_env', type=str, help='The name of the old environment')
@@ -21,6 +16,7 @@ args = parser.parse_args()
 APPLICATION = args.application
 OLD_ENVIRONMENT = args.old_env
 ENVIRONMENT = args.new_env
+FILENAME = "ssm_parameters.json"
 
 old_ssm_path_root = f"/copilot/{APPLICATION}/{OLD_ENVIRONMENT}/"
 ssm_path_root = f"/copilot/{APPLICATION}/{ENVIRONMENT}/"
