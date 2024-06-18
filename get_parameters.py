@@ -1,7 +1,3 @@
-# export AWS_PROFILE=datahub
-# export AWS_REGION=eu-west-2
-# export AWS_DEFAULT_REGION=eu-west-2
-
 import json
 import argparse
 import boto3
@@ -19,7 +15,7 @@ ssm = boto3.client('ssm')
 
 ssm_path_root = f"/copilot/{APPLICATION}/{ENVIRONMENT}/"
 paginator = ssm.get_paginator('get_parameters_by_path')
-# Would be ideal to extend this to just get Name, Value, Type
+
 response_iterator = paginator.paginate(
     Path=ssm_path_root,
     Recursive=True

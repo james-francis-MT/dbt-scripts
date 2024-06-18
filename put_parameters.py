@@ -1,7 +1,3 @@
-# export AWS_PROFILE=datahub-prod
-# export AWS_REGION=eu-west-2
-# export AWS_DEFAULT_REGION=eu-west-2
-
 import json
 import argparse
 import boto3
