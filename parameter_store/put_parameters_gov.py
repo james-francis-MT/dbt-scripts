@@ -26,29 +26,31 @@ class Param:
         self.value = value
 
     def name_as_key(self, app, env, service):
-        return f"/copilot/{app}/{env}/{service}/{self.name}"
-        
+        return f"/copilot/{app}/{env}/{service}/secrets/{self.name}"
+
 
 params: list[Param] = []
 for line in ssm_data.splitlines():
     [name, *value] = line.split(": ", 1)
-    value = value[0] if value else None
+    value = value[0] if value else " "
     params.append(Param(name, value))
 
 for param in params:
-     print(f"Setting SSM parameter with name: {param.name_as_key(APPLICATION, ENVIRONMENT, SERVICE)}")
-     try:
-         ssm.put_parameter(Name=param.name_as_key(APPLICATION, ENVIRONMENT, SERVICE),
-                       Value=param.value,
-                       Tags=[
-                           {"Key": "copilot-application", "Value": f"{APPLICATION}"},
-                           {"Key": "copilot-environment", "Value": f"{ENVIRONMENT}"}
-                       ],
-                       Type="String",
-                       Overwrite=False)
-     except exceptions.ClientError as e:
-         print(f"{param.name} parameter already exists, will not Overwrite")
-         pass
- 
-     print(f"Set SSM parameter with name: {param.name}")
+    print(f"Setting SSM parameter with name: {param.name_as_key(APPLICATION, ENVIRONMENT, SERVICE)}")
+    try:
+        ssm.put_parameter(Name=param.name_as_key(APPLICATION, ENVIRONMENT, SERVICE),
+                          Value=param.value,
+                          Tags=[
+                          {"Key": "copilot-application", "Value": f"{APPLICATION}"},
+                          {"Key": "copilot-environment", "Value": f"{ENVIRONMENT}"}
+                          ],
+                          Type="String",
+                          Overwrite=False)
+    except exceptions.ClientError as e:
+        print(e)
+        print(f"{param.name} parameter already exists, will not Overwrite")
+        continue
+
+    print(f"Set SSM parameter with name: {param.name}")
+
 
